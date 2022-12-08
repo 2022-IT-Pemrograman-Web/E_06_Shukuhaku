@@ -24,24 +24,23 @@ router.post('/login', async function (req, res, next) {
     try{
         const id = req.body.email;
         const user = await db.collection('users').doc(id).get();
-        bcrypt.compare(req.body.password, user.password, function(result) {
-            if(result){
-                const token = jwt.sign({ user: user }, req.app.get('secretKey'), { expiresIn: '3h' });
-                res.cookie("jwt", token, {
-                    httpOnly: true,
-                    maxAge: 3 * 60 * 60 * 1000, // 3hrs in ms
-                });
-                res.json({
-                    message: "Auth Success!!!", 
-                    data: { user: user, token: token } 
-                });
-            } else {
-                res.status(400).json({
-                    message: "Invalid email/password!!!", 
-                    data: null 
-                });
-            }
-        });
+        let result = bcrypt.compareSync(req.body.password, user.data().password)
+        if(result){
+            const token = jwt.sign({ user: user }, req.app.get('secretKey'), { expiresIn: '3h' });
+            res.cookie("jwt", token, {
+                httpOnly: true,
+                maxAge: 3 * 60 * 60 * 1000, // 3hrs in ms
+            });
+            res.json({
+                message: "Auth Success!!!", 
+                data: { user: user, token: token } 
+            });
+        } else {
+            res.status(400).json({
+                message: "Invalid email/password!!!", 
+                data: null 
+            });
+        }
     } catch(err){
         res.send(err)
     }

@@ -11,7 +11,7 @@ const catchError = (err, res) => {
 }
 
 exports.userAuth = (req, res, next) => {
-    let token = req.cookies.jwt;
+    let token = req.header['x-access-token'];
 
     if (!token) {
         return res.status(403).send({ message: "No token provided!" });
@@ -27,7 +27,7 @@ exports.userAuth = (req, res, next) => {
 };
 
 exports.udminAuth = (req, res, next) => {
-    let token = req.cookies.jwt;
+    let token = req.header['x-access-token'];
 
     if (!token) {
         return res.status(403).send({ message: "No token provided!" });
