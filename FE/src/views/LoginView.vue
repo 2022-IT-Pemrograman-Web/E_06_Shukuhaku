@@ -47,25 +47,16 @@ export default {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Access-Control-Allow-Origin': '*',
-                }
+                },
+                withCredentials: true,
             },
         }
     },
     methods: {
         async login() {
-            await this.axios.post('http://localhost:3000/login', 
-            {
-                email: this.email,
-                password: this.password,
-            }, this.config).then((response) => {
-                // console.log(response.data);
-                return response.data;
-                localStorage.setItem('token', response.data.token);
-                // this.$router.push('/home');
-            }).catch((error) => {
-                return error;
-                // console.log(error);
-            });
+            const response = await this.axios.post('http://localhost:3000/login', this.datas, this.config);
+            console.log(response);
+            // this.$router.push('/home');
         },
     },
 }

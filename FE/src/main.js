@@ -8,8 +8,8 @@ import * as Vue from 'vue'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 
+// axios.defaults.withCredentials = true
 const app = Vue.createApp(App)
-
 app.use(VueAxios, axios)
 app.use(router)
 
