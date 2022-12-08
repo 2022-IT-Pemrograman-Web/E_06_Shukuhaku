@@ -28,7 +28,7 @@ router.get('/kamars/:id', async function (req, res, next) {
     }
 });
 
-router.post('/pemesanan', async function (req, res, next) {
+router.post('/pemesanans', async function (req, res, next) {
     try{
         let end_date = new Date();
         end_date.setDate(end_date.getDate() + req.body.total_day); 
@@ -40,8 +40,8 @@ router.post('/pemesanan', async function (req, res, next) {
             start_date: new Date(),
             end_date: end_date,
         };
-        await 
-        console.log(data);
+        const response = await db.collection('pemesanans').set(data);
+        console.log(response);
         res.json({message: "success", data: {kamars: kamars}});
     } catch (err){
         res.status(500).json({message: "Something wrong...", data: null })
