@@ -1,5 +1,6 @@
 POST http://localhost:3000/register 
 Content-Type: application/x-www-form-urlencoded
+
 &email=gege@gmail.com
 &name=pelawak handal
 &password=123456
