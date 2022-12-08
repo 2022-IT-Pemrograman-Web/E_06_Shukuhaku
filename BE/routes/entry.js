@@ -14,7 +14,7 @@ router.post('/register', async function (req, res, next) {
         };
         const response = await db.collection('users').doc(id).set(data);
         console.log(response);
-        res.json(data);
+        res.json({message: "Success", data: data });
     } catch (err){
         res.status(500).json({message: "Something wrong...", data: null })
     }
