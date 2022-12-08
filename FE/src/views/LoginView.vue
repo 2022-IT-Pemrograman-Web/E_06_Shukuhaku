@@ -56,7 +56,10 @@ export default {
         async login() {
             const response = await this.axios.post('http://localhost:3000/login', this.datas, this.config);
             console.log(response);
-            // this.$router.push('/home');
+            var token = response.data.data.token;
+            sessionStorage.setItem('token', token);
+            console.log(sessionStorage.getItem('token'));
+            // this.$router.push('/kamar');
         },
     },
 }
