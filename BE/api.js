@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 var cors = require('cors')
 const entry = require('./routes/entry');
 const users = require('./routes/users');
+const admin = require('./routes/admin');
 const { adminAuth, userAuth } = require("./middlewares/auth.js");
 
 const app = express();
@@ -33,6 +34,7 @@ app.get('/', function(req, res){
 
 app.use('/', entry);
 app.use('/user', userAuth, users);
+app.use('/admin', adminAuth, admin);
 
 app.listen(3000, function(){
     console.log('Node server listening on port 3000');
