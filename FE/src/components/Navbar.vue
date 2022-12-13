@@ -23,13 +23,26 @@
                     Register
                 </router-link>
             </button>
+            <button type="button" class="btn btn-danger" @click="logout">
+              Logout
+            </button>
           </div>
         </header>
     </div>
 </template>
 <script>
 export default {
-    
+    data(){
+      return{
+
+      }
+    },
+    methods:{
+      logout(){
+        sessionStorage.clear();
+        this.$router.push('/login');
+      }
+    }
 }
 </script>
 <style scoped>
