@@ -2,7 +2,7 @@
     <div class="container">
       <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
         <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-          <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+          <a href="/home" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
             <img src="../assets/image (3).png" style="width: 84px; height: 48px" alt="">
           </a>
     
@@ -44,9 +44,9 @@ export default {
 }
 </script>
 <style lang="css">
-    .big-text {
-        font-size: 1.5em;
-        font-family: 'SF Pro Display';
-        font-weight: 200;
-    }
+  .big-text {
+      font-size: 1.5em;
+      font-family: 'SF Pro Display';
+      font-weight: 200;
+  }
 </style>
