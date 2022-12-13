@@ -42,7 +42,7 @@ router.post('/login', async function (req, res, next) {
             });
         }
     } catch(err){
-        res.send(err)
+        res.status(500).send(err)
     }
 });
 

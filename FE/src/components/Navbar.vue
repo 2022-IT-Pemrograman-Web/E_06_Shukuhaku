@@ -14,11 +14,15 @@
     
           <div class="col-md-3 text-end">
             <button type="button" class="btn btn-outline-primary me-2">
-                <router-link to="/login">
+                <router-link class="no-decor" to="/login">
                     Login
                 </router-link>
             </button>
-            <button type="button" class="btn btn-primary">Sign-up</button>
+            <button type="button" class="btn btn-primary">
+                <router-link class="no-decor white" to="/register">
+                    Register
+                </router-link>
+            </button>
           </div>
         </header>
     </div>
@@ -28,6 +32,11 @@ export default {
     
 }
 </script>
-<style lang="">
-    
+<style scoped>
+    .no-decor{
+      text-decoration: none;
+    }
+    .white{
+      color: white;
+    }
 </style>
