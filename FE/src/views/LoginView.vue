@@ -59,8 +59,13 @@ export default {
             var token = response.data.data.token;
             sessionStorage.setItem('token', token);
             console.log(sessionStorage.getItem('token'));
-            // this.$router.push('/kamar');
+            this.$router.push('/home');
         },
+    },
+    mounted() {
+        if (sessionStorage.getItem('token') != null) {
+            this.$router.push('/home');
+        }
     },
 }
 </script>

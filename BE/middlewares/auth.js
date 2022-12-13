@@ -26,7 +26,7 @@ exports.userAuth = (req, res, next) => {
     });
 };
 
-exports.udminAuth = (req, res, next) => {
+exports.adminAuth = (req, res, next) => {
     let token = req.headers['x-access-token'];
 
     if (!token) {
