@@ -1,4 +1,4 @@
-<template lang="">
+<template>
     <div>
         <div class="container">
             <div class="row">
@@ -12,19 +12,17 @@
                         <label for="floatingInput">Email address</label>
                       </div>
                       <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="floatingInputName" placeholder="John Doe" v-model="this.datas.name">
+                        <label for="floatingInput">Name</label>
+                      </div>
+                      <div class="form-floating mb-3">
                         <input type="password" class="form-control" id="floatingPassword" placeholder="Password" v-model="this.datas.password">
                         <label for="floatingPassword">Password</label>
                       </div>
-        
-                      <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="rememberPasswordCheck">
-                        <label class="form-check-label" for="rememberPasswordCheck">
-                          Remember password
-                        </label>
-                      </div>
                       <div class="d-grid">
-                        <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" v-on:click="login()">Sign
-                          in</button>
+                        <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" @click="register">
+                            Register
+                        </button>
                       </div>
                       <hr class="my-4">
                     </form>
@@ -35,12 +33,14 @@
         </div>
     </div>
 </template>
+
 <script>
 export default {
     data() {
         return {
             datas : {
                 email: '',
+                name: '',
                 password: '',
             },
             config: {
@@ -53,17 +53,32 @@ export default {
         }
     },
     methods: {
-        async login() {
-            const response = await this.axios.post('http://localhost:3000/login', this.datas, this.config);
+        async register() {
+            const response = await this.axios.post('http://localhost:3000/register', this.datas, this.config);
             console.log(response);
-            var token = response.data.data.token;
-            sessionStorage.setItem('token', token);
-            console.log(sessionStorage.getItem('token'));
-            this.$router.push('/home');
+            if(response.status == 200){
+                this.message = '';
+                var creds = {
+                        email: this.datas.email,
+                        password: this.datas.password,
+                    };
+                console.log(creds);
+                const res = await this.axios.post('http://localhost:3000/login', creds, this.config);
+                console.log(res);
+                var token = res.data.data.token;
+                sessionStorage.setItem('token', token);
+                console.log(sessionStorage.getItem('token'));
+                this.$router.push('/home');
+            }
+            else{
+                this.message = "Register failed! Check your input.";
+            }
         },
     },
+    mounted(){
+        if(sessionStorage.getItem('token') != null){
+            this.$router.push('/home');
+        }
+    }
 }
 </script>
-<style lang="">
-    
-</style>
