@@ -62,6 +62,11 @@ export default {
             this.$router.push('/home');
         },
     },
+    mounted() {
+        if (sessionStorage.getItem('token') != null) {
+            this.$router.push('/home');
+        }
+    },
 }
 </script>
 <style lang="">
