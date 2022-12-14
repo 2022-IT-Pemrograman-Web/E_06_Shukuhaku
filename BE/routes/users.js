@@ -2,6 +2,7 @@ const router = require('express').Router();
 const db = require('../firebase/firestore');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const fromDate = require('firebase-admin').firestore.Timestamp.fromDate;
 
 router.get('/kamars', async function (req, res, next) {
     try{
@@ -118,7 +119,7 @@ router.post('/pemesanans/checkout', async function (req, res, next) {
 router.get('/voucher', async function (req, res, next) {
     try{
         let voucher = [];
-        await db.collection("voucher").where("expiredAt", ">", new Date()).get().then((querySnapshot) => {
+        await db.collection("voucher").where("expiredAt", ">", fromDate(new Date())).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 voucher.push({id: doc.id, ...doc.data()});
             });
