@@ -63,7 +63,7 @@ router.post('/pemesanans', async function (req, res, next) {
         end_date.setDate(end_date.getDate() + req.body.total_day); 
         const data = {
             kamar_id: req.body.kamar_id,
-            user_id: req.body.kamar_id,
+            user_id: req.body.user_id,
             total_day: req.body.total_day,
             total_price: req.body.total_price,
             start_date: new Date(),
