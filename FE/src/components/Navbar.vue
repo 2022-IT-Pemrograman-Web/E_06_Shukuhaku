@@ -19,8 +19,13 @@
                     Login
                 </router-link>
             </button>
-            <button type="button" class="btn btn-primary" v-if="token == null">
-              Sign-up
+            <button type="button" class="btn btn-primary">
+                <router-link class="no-decor white" to="/register">
+                    Register
+                </router-link>
+            </button>
+            <button v-show="loggedIn" type="button" class="btn btn-danger" @click="logout">
+              Logout
             </button>
           </div>
         </header>
@@ -28,19 +33,25 @@
 </template>
 <script>
 export default {
-  data() {
-    return {
-      token: sessionStorage.getItem('token') == null ? null : sessionStorage.getItem('token'),
-      config: {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Control-Allow-Origin': '*',
-        },
-        withCredentials: true,
+    data(){
+      return{
+        loggedIn: (sessionStorage.getItem('token') != null),
+      }
+    },
+    methods:{
+      logout(){
+        sessionStorage.clear();
+        this.loggedIn = false;
+        this.$router.push('/login');
+        this.loggedIn = (sessionStorage.getItem('token') != null);
       },
+      load(){
+        this.loggedIn = (sessionStorage.getItem('token') != null);
+      }
+    },
+    created(){
+        this.load();
     }
-  },
-    
 }
 </script>
 <style lang="css">
