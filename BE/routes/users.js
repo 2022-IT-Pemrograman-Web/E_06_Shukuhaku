@@ -59,21 +59,45 @@ router.get('/kamars/:id', async function (req, res, next) {
 
 router.post('/pemesanans', async function (req, res, next) {
     try{
-        let end_date = new Date();
-        end_date.setDate(end_date.getDate() + req.body.total_day); 
+        //console.log(new Date());
+        console.log(req.user);
+        let end_date = new Date(req.body.start_date);
+        console.log(end_date);
+        end_date.setDate(end_date.getDate() + Number.parseInt(req.body.total_day));
+        console.log(req.body.total_day);
+        console.log(end_date);
+        var kamar = [];
+        await db.collection('kamars').where('class', '==', req.body.kamar_class).where('available', '==', null).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        kamar.push({id: doc.id, ...doc.data()});
+                    });
+                });
+        await db.collection('kamars').where('available', '<=', fromDate(new Date())).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        if(doc.data().class == req.body.kamar_class) kamar.push({id: doc.id, ...doc.data()});
+                    });
+                });
+        console.log(kamar);
+        if(kamar.length == 0){
+            res.status(501).json({message: "Kamar is full"});
+        }
         const data = {
-            kamar_id: req.body.kamar_id,
-            user_id: req.body.user_id,
+            kamar_id: kamar[0].id,
+            user_id: req.user.email,
             total_day: req.body.total_day,
             total_price: req.body.total_price,
-            start_date: new Date(),
+            start_date: new Date(req.body.start_date),
             end_date: end_date,
             checked_out: null,
         };
+        console.log(data);
         const response = await db.collection('pemesanans').add(data);
+        console.log("ok3");
         console.log(response);
         const response2 = await db.collection('kamars')
-                                    .doc(req.body.kamar_id)
+                                    .doc(kamar[0].id)
                                     .update({available: end_date});
         res.json({message: "success", data: data});
     } catch (err){
@@ -105,11 +129,14 @@ router.post('/pemesanans/checkout', async function (req, res, next) {
         const response = await pemesananRef.update({checked_out: checked_out});
         console.log(response);
         let pemesanan = pemesananRef.get();
-        const response2 = await db.collection('kamars')
+        const ref = db.collection('kamars').doc(pemesanan.data().kamar_id);
+        var dt = await ref.get();
+        if(dt.data().available == pemesanan.data().end_date){
+            const response2 = await db.collection('kamars')
                                     .doc(pemesanan.data().kamar_id)
                                     .update({available: null});
-        console.log(response2);
-        
+            console.log(response2);
+        }
         res.json({message: "success", data: {checked_out: checked_out}});
     } catch (err){
         res.status(500).json({message: "Something wrong...", data: null })
