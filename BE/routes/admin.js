@@ -161,7 +161,7 @@ router.post('/voucher', async function (req, res, next) {
         const data = {
             code: req.body.code,
             discount: req.body.discount,
-            expiredAt: req.body.expiredAt,
+            expiredAt: fromDate(req.body.expiredAt),
         };
         console.log("ok");
         console.log(data);
