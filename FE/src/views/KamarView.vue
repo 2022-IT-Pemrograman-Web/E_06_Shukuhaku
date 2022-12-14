@@ -1,6 +1,11 @@
 <template lang="">
     <div>
         {{ this.datas }}
+        <div class="card">
+            <div class="card-header">
+                
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -20,13 +25,20 @@ export default {
     },
     methods: {
         async getKamar() {
-            const response = await this.axios.get('http://localhost:3000/user/kamars', this.config);
-            this.datas = response.data.data;
+            try{
+                const response = await this.axios.get('http://localhost:3000/user/kamars', this.config);
+                this.datas = response.data.data;
+                console.log(response)
+            } catch(err){
+                console.log(err);
+                this.$router.push('/login');
+            }
+            
         },
     },
     mounted() {
         this.getKamar();
-        console.log(sessionStorage.getItem('token'));
+        //console.log(sessionStorage.getItem('token'));
     },
 }
 </script>
