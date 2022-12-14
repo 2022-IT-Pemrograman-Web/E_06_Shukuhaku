@@ -18,6 +18,31 @@ router.get('/kamars', async function (req, res, next) {
     }
 });
 
+router.get('/kamars/class', async function (req, res, next) {
+    try{
+        var kamars = [];
+        await db.collection("kamars").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                kamars.push({id: doc.id, ...doc.data()});
+            });
+        });
+        var unique = [];
+        for(let kamar of kamars){
+            if(!unique.includes(kamar.class)){
+                unique.push({
+                    class: kamar.class,
+                    price: kamar.price,
+                    facility: kamar.facility,
+                });
+            }
+        }
+        console.log(unique);
+        res.json({message: "success", data: {kamars: unique}});
+    } catch (err){
+        res.status(500).json({message: "Something wrong...", data: null })
+    }
+});
+
 router.get('/kamars/:id', async function (req, res, next) {
     try{
         let doc = await db.collection("kamars").doc(req.param('id')).get();

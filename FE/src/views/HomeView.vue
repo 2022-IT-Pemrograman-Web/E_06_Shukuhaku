@@ -2,9 +2,11 @@
 export default{
   data(){
     return{
-      loggedIn: (sessionStorage.getItem('token') != null),
     }
-  }
+  },
+  props:[
+    'loggedin', 'loggedUser'
+  ]
 }
 </script>
 
