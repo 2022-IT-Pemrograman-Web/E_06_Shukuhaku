@@ -38,7 +38,7 @@ export default {
       }
     },
     props:[
-      'loggedIn'
+      'loggedIn', 'loggedUser'
     ],
     methods:{
       logout(){

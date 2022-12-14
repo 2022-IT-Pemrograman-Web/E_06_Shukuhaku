@@ -26,14 +26,14 @@ router.post('/login', async function (req, res, next) {
         const user = await db.collection('users').doc(id).get();
         let result = bcrypt.compareSync(req.body.password, user.data().password)
         if(result){
-            const token = jwt.sign({ user: user }, req.app.get('secretKey'), { expiresIn: '3h' });
+            const token = jwt.sign({ user: user.data() }, req.app.get('secretKey'), { expiresIn: '3h' });
             res.cookie("jwt", token, {
                 httpOnly: true,
                 maxAge: 3 * 60 * 60 * 1000, // 3hrs in ms
             });
             res.json({
                 message: "Auth Success!!!", 
-                data: { user: user, token: token } 
+                data: { user: user.data(), token: token } 
             });
         } else {
             res.status(400).json({
