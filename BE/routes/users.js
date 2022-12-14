@@ -27,17 +27,19 @@ router.get('/kamars/class', async function (req, res, next) {
             });
         });
         var unique = [];
+        var data = []
         for(let kamar of kamars){
-            if(!unique.includes(kamar.class)){
-                unique.push({
+            if(unique.includes(kamar.class) == false){
+                data.push({
                     class: kamar.class,
                     price: kamar.price,
                     facility: kamar.facility,
                 });
+                unique.push(kamar.class);
             }
         }
         console.log(unique);
-        res.json({message: "success", data: {kamars: unique}});
+        res.json({message: "success", data: {kamars: data}});
     } catch (err){
         res.status(500).json({message: "Something wrong...", data: null })
     }
