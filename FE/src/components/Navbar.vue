@@ -23,7 +23,7 @@
                     Register
                 </router-link>
             </button>
-            <button type="button" class="btn btn-danger" @click="logout">
+            <button v-show="loggedIn" type="button" class="btn btn-danger" @click="logout">
               Logout
             </button>
           </div>
@@ -34,14 +34,22 @@
 export default {
     data(){
       return{
-
+        loggedIn: (sessionStorage.getItem('token') != null),
       }
     },
     methods:{
       logout(){
         sessionStorage.clear();
+        this.loggedIn = false;
         this.$router.push('/login');
+        this.loggedIn = (sessionStorage.getItem('token') != null);
+      },
+      load(){
+        this.loggedIn = (sessionStorage.getItem('token') != null);
       }
+    },
+    created(){
+        this.load();
     }
 }
 </script>
