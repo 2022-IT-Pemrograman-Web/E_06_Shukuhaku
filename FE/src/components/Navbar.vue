@@ -20,11 +20,11 @@
                 </router-link>
             </button>
             <button type="button" class="btn btn-primary">
-                <router-link class="no-decor white" to="/register">
+                <router-link class="no-decor white-text" to="/register" >
                     Register
                 </router-link>
             </button>
-            <button v-show="loggedIn" type="button" class="btn btn-danger" @click="logout">
+            <button v-show="loggedIn" type="button" class="btn btn-danger" @click="logout" v-if="token != null">
               Logout
             </button>
           </div>
