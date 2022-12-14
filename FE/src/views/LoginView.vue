@@ -58,15 +58,15 @@ export default {
             console.log(response);
             var token = response.data.data.token;
             var user = response.data.data.user;
-            sessionStorage.setItem('user', user);
-            sessionStorage.setItem('token', token);
+            localStorage.setItem('user', user);
+            localStorage.setItem('token', token);
             this.$emit('updateLogin', user);
-            console.log(sessionStorage.getItem('token'));
+            console.log(localStorage.getItem('token'));
             this.$router.push('/home');
         },
     },
     mounted() {
-        if (sessionStorage.getItem('token') != null) {
+        if (localStorage.getItem('token') != null) {
             this.$router.push('/home');
         }
     },

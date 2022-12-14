@@ -5,7 +5,7 @@ export default{
     }
   },
   props:[
-    'loggedin', 'loggedUser'
+    'loggedIn', 'loggedUser'
   ]
 }
 </script>
@@ -37,7 +37,7 @@ export default{
       </div>
       <br>
 
-      <div class="p-5 mb-4 bg-light rounded-3 checkout" v-if="loggedIn">
+      <div class="p-5 mb-4 bg-light rounded-3 checkout" v-show="loggedIn">
         <div class="container-fluid py-5" >
           <h1 class="display-5 fw-bold white-text">Kamar Berapa gitu</h1>
           <p class="col-md-8 fs-4 white-text">Tipe kelas kamar</p>
