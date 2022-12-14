@@ -5,7 +5,7 @@ export default{
     }
   },
   props:[
-    'loggedin', 'loggedUser'
+    'loggedIn', 'loggedUser',
   ]
 }
 </script>

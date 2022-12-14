@@ -35,6 +35,7 @@ app.get('/', function(req, res){
 app.use('/', entry);
 app.use('/user', userAuth, users);
 app.use('/admin', adminAuth, admin);
+app.use('/admin', adminAuth, users);
 
 app.listen(3000, function(){
     console.log('Node server listening on port 3000');
