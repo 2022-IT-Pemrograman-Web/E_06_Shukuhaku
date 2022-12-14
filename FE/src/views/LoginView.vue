@@ -57,7 +57,10 @@ export default {
             const response = await this.axios.post('http://localhost:3000/login', this.datas, this.config);
             console.log(response);
             var token = response.data.data.token;
+            var user = response.data.data.user;
+            sessionStorage.setItem('user', user);
             sessionStorage.setItem('token', token);
+            this.$emit('updateLogin', user);
             console.log(sessionStorage.getItem('token'));
             this.$router.push('/home');
         },

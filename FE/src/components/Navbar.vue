@@ -14,17 +14,17 @@
           </ul>
     
           <div class="col-md-3 text-end">
-            <button type="button" class="btn btn-outline-primary me-2" v-if="token == null">
-                <router-link to="/login">
+            <button type="button" class="btn btn-outline-primary me-2" v-if="!loggedIn">
+                <router-link class="no-decor" to="/login">
                     Login
                 </router-link>
             </button>
-            <button type="button" class="btn btn-primary">
-                <router-link class="no-decor white-text" to="/register" >
+            <button type="button" class="btn btn-primary" v-show="!loggedIn">
+                <router-link class="no-decor white" to="/register">
                     Register
                 </router-link>
             </button>
-            <button v-show="loggedIn" type="button" class="btn btn-danger" @click="logout" v-if="token != null">
+            <button v-show="loggedIn" type="button" class="btn btn-danger" @click="logout">
               Logout
             </button>
           </div>
@@ -35,23 +35,18 @@
 export default {
     data(){
       return{
-        loggedIn: (sessionStorage.getItem('token') != null),
       }
     },
+    props:[
+      'loggedIn'
+    ],
     methods:{
       logout(){
         sessionStorage.clear();
-        this.loggedIn = false;
+        this.$emit('destroyUser');
         this.$router.push('/login');
-        this.loggedIn = (sessionStorage.getItem('token') != null);
       },
-      load(){
-        this.loggedIn = (sessionStorage.getItem('token') != null);
-      }
     },
-    created(){
-        this.load();
-    }
 }
 </script>
 <style lang="css">
@@ -59,5 +54,11 @@ export default {
       font-size: 1.5em;
       font-family: 'SF Pro Display';
       font-weight: 200;
+  }
+  .no-decor{
+    text-decoration: none;
+  }
+  .white{
+    color: white;
   }
 </style>
