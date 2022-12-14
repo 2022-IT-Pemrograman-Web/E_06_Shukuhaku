@@ -37,6 +37,16 @@ router.post('/kamars', async function (req, res, next) {
             class: req.body.class,
             price: req.body.price,
             available: true,
+            facility: {
+                balcony: req.body.balcony,
+                ac: req.body.ac,
+                tv: req.body.tv,
+                living_room: req.body.living_room,
+                bed: req.body.bed,
+                breakfast: req.body.breakfast,
+                bathroom: req.body.bathroom,
+                private_onsen: req.body.private_onsen,
+            }
         };
         const response = await db.collection('kamars').doc(id).set(data);
         console.log(response);

@@ -1,6 +1,7 @@
 <template lang="">
     <NavbarVue 
         :loggedIn="loggedIn"
+        :loggedUser="loggedUser"
         @destroyUser="destroyUser"
     />
     <RouterView 
