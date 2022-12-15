@@ -5,7 +5,17 @@
             <h2>Form Pembayaran</h2>
             <!-- <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p> -->
           </div>
-      
+          
+          <div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="msg_gagal">
+            Room is Full
+            <button type="button" class="btn-close" v-on:click="msg_gagal = false" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+
+          <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="code_redeemed">
+            Code is Successfully Redeemed
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+
           <div class="row g-5">
             <div class="col-md-5 col-lg-4 order-md-last">
               <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -98,6 +108,8 @@ export default {
             code : '',
             total_discount : 1.0,
             start_date : '',
+            msg_gagal : false,
+            code_redeemed : false,
         }
     },
     computed: {
@@ -135,27 +147,36 @@ export default {
         for (let i of this.voucher) {
           if (i.code == code) {
             this.total_discount = 1 - (i.discount/100);
+            this.code_redeemed = true;
             break;
           }
           else{
             this.total_discount = 1.0;
+            this.code_redeemed = false;
           }
         }
       },
       async storePemesanan() {
         try{
-            console.log(new Date(this.start_date));
-            const response = await this.axios.post('http://localhost:3000/user/pemesanans', {
-                kamar_class: this.kamar.class,
-                start_date: new Date(this.start_date),
-                total_day: this.total_day,
-                total_price: this.total_price,
-            }, this.config);
-            console.log(response);
-        } catch(err){
-            console.log(err);
-            this.$router.push('/pemesanan');
+          console.log(new Date(this.start_date));
+          const response = await this.axios.post('http://localhost:3000/user/pemesanans', {
+              kamar_class: this.kamar.class,
+              start_date: new Date(this.start_date),
+              total_day: this.total_day,
+              total_price: this.total_price,
+          }, this.config);
         }
+        catch(err){
+          // this.$router.push('/pemesanan');
+          this.msg_gagal = true;
+        }
+        // console.log(response);
+        // if(response.response.status == 200){
+        //     this.$router.push('/home');
+        // }
+        // else{
+        //     this.$router.push('/user/pemesanan');
+        // }
       },
     },
     beforeMount() {
