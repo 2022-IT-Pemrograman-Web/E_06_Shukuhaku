@@ -58,7 +58,7 @@ export default {
             console.log(response);
             var token = response.data.data.token;
             var user = response.data.data.user;
-            localStorage.setItem('user', user);
+            localStorage.setItem('user', JSON.stringify(user));
             localStorage.setItem('token', token);
             this.$emit('updateLogin', user);
             console.log(localStorage.getItem('token'));
