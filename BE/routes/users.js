@@ -92,6 +92,7 @@ router.post('/pemesanans', async function (req, res, next) {
             start_date: new Date(req.body.start_date),
             end_date: end_date,
             checked_out: null,
+            checked_in: null,
         };
         console.log(data);
         const response = await db.collection('pemesanans').add(data);
