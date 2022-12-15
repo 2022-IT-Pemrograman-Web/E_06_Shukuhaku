@@ -25,14 +25,6 @@
       </div>
     </div>
   </div>
-  <div>
-      {{ this.datas }}
-      <div class="card">
-          <div class="card-header">
-              
-          </div>
-      </div>
-  </div>
 </div>
 </template>
 <script>

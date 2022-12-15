@@ -1,5 +1,74 @@
 <template lang="">
-    <div class="container">
+    <div class="container" v-if="loggedUser == 'admin'">
+      <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="../assets/image (3).png" alt="" width="126" height="72">
+        <h2>Pemesanan Aktif</h2>
+        <!-- <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p> -->
+      </div>
+      <div class="row g-5">
+        <div class="col-md-5 col-lg-6 order-md-last">
+          <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-primary">Check In</span>
+          </h4>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">User</th>
+                <th scope="col">Kamar ID</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Handle</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(p, id) in pemesanan_checked_in" :key="id">
+                <th scope="row" v-if="p.checked_in == null && p.checked_out == null">{{ id+1 }}</th>
+                <td v-if="p.checked_in == null && p.checked_out == null">{{ p.user_id }}</td>
+                <td v-if="p.checked_in == null && p.checked_out == null">{{ p.kamar_id }}</td>
+                <td v-if="p.checked_in == null && p.checked_out == null">{{ p.start_date }}</td>
+                <td v-if="p.checked_in == null && p.checked_out == null">{{ p.end_date }}</td>
+                <td v-if="p.checked_in == null && p.checked_out == null">
+                  <button class="btn btn-danger btn-lg box-shadow" type="button" v-if="p.checked_in == null && p.checked_out == null" v-on:click="checkedIn(p.id)">Please Check In</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="col-md-5 col-lg-6 order-md-last">
+          <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-primary">Check Out</span>
+          </h4>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">User</th>
+                <th scope="col">Kamar ID</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Handle</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(p, id) in pemesanan_checked_out" :key="id">
+                <th scope="row" v-if="p.checked_in != null && p.checked_out == null">{{ id+1 }}</th>
+                <td v-if="p.checked_in != null && p.checked_out == null">{{ p.user_id }}</td>
+                <td v-if="p.checked_in != null && p.checked_out == null">{{ p.kamar_id }}</td>
+                <td v-if="p.checked_in != null && p.checked_out == null">{{ p.start_date }}</td>
+                <td v-if="p.checked_in != null && p.checked_out == null">{{ p.end_date }}</td>
+                <td v-if="p.checked_in != null && p.checked_out == null">
+                  <button class="btn btn-danger btn-lg box-shadow" type="button" v-if="p.checked_in != null && p.checked_out == null" v-on:click="checkedOut(p.id)">Check Out</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" v-if="loggedUser == 'user'">
           <div class="py-5 text-center">
             <img class="d-block mx-auto mb-4" src="../assets/image (3).png" alt="" width="126" height="72">
             <h2>Form Pembayaran</h2>
@@ -39,7 +108,7 @@
                 <div class="row g-3">
 
                   <div class="col-12">
-                    <label for="kamar_class" class="form-label">Jenis Kamar {{ kamar }}</label>
+                    <label for="kamar_class" class="form-label">Jenis Kamar</label>
                     <select class="form-select" id="kamar_class" required v-model="kamar">
                       <option v-for="j in jenis_kamar" :value="j">
                         {{j.class}} 
@@ -110,12 +179,19 @@ export default {
             start_date : '',
             msg_gagal : false,
             code_redeemed : false,
+            loggedUser : JSON.parse(localStorage.getItem('user')).role,
+            pemesanan_checked_in : [],
+            pemesanan_checked_out : [],
         }
     },
     computed: {
         total_price() {
             return this.kamar.price * this.total_day * this.total_discount;
         },
+    },
+    emits : {
+        updateLogin : null,
+        destroyUser : null,
     },
     methods: {
       async getKamar() {
@@ -165,6 +241,7 @@ export default {
               total_day: this.total_day,
               total_price: this.total_price,
           }, this.config);
+          this.$router.push('/home');
         }
         catch(err){
           // this.$router.push('/pemesanan');
@@ -178,14 +255,54 @@ export default {
         //     this.$router.push('/user/pemesanan');
         // }
       },
+      async getActivePemesanan(){
+        try{
+          const response = await this.axios.get('http://localhost:3000/admin/pemesanans/active', this.config);
+          this.pemesanan_checked_in = response.data.data.pemesanans.filter((x) => x.checked_in == null && x.checked_out == null);
+          this.pemesanan_checked_out = response.data.data.pemesanans.filter((x) => x.checked_in != null && x.checked_out == null);
+          // console.log(this.pemesanan);
+        }
+        catch(err){
+          console.log(err);
+        }
+      },
+      async checkedIn(id){
+        try{
+          const response = await this.axios.post('http://localhost:3000/admin/pemesanans/checkin', {
+            id: id,
+          }, this.config);
+          this.getActivePemesanan();
+        }
+        catch(err){
+          console.log(err)
+        }
+      },
+      async checkedOut(id){
+        try{
+          const response = await this.axios.post('http://localhost:3000/admin/pemesanans/checkout', {
+            id: id,
+          }, this.config);
+          this.getActivePemesanan();
+        }
+        catch(err){
+          console.log(err)
+        }
+      },
     },
     beforeMount() {
-      this.getKamar();
-      this.getCode();
-      console.log(this.jenis_kamar)
+      if(this.loggedUser == 'user'){
+        this.getKamar();
+        this.getCode();
+        console.log(this.jenis_kamar)
+        console.log(this.loggedUser)
+      }
+      else{
+        this.getActivePemesanan();
+      }
     },
     mounted() {
       console.log(this.date);
+      
     }
 }
 </script>
