@@ -116,8 +116,8 @@ router.get('/pemesanans/user', async function (req, res, next) {
             .get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 let data = doc.data();
-                data['start_date'] = data['start_date'].toDate();
-                data['end_date'] = data['end_date'].toDate();
+                data['start_date'] = data['start_date'].toDate().toDateString();
+                data['end_date'] = data['end_date'].toDate().toDateString();
                 pemesanans.push({id: doc.id, ...data});
             });
         });
@@ -136,8 +136,8 @@ router.get('/pemesanans/active/user', async function (req, res, next) {
         await db.collection("pemesanans").where("user_id", "==", user.email).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 let data = doc.data();
-                data['start_date'] = data['start_date'].toDate();
-                data['end_date'] = data['end_date'].toDate();
+                data['start_date'] = data['start_date'].toDate().toDateString();
+                data['end_date'] = data['end_date'].toDate().toDateString();
                 console.log(data.checked_out);
                 if(data.checked_out == null) pemesanans.push({id: doc.id, ...data});
             });
