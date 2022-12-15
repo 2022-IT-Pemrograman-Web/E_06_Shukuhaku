@@ -16,13 +16,13 @@ import NavbarVue from './components/Navbar.vue';
 export default {
     data(){
         return{
-            loggedIn: (sessionStorage.getItem('token') != null),
+            loggedIn: (localStorage.getItem('token') != null),
             loggedUser: null,
         }
     },
     methods:{
         updateLogin(user){
-            this.loggedIn = (sessionStorage.getItem('token') != null);
+            this.loggedIn = (localStorage.getItem('token') != null);
             this.loggedUser = user;
         },
         destroyUser(){

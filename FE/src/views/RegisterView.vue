@@ -66,8 +66,8 @@ export default {
                 const res = await this.axios.post('http://localhost:3000/login', creds, this.config);
                 console.log(res);
                 var token = res.data.data.token;
-                sessionStorage.setItem('token', token);
-                console.log(sessionStorage.getItem('token'));
+                localStorage.setItem('token', token);
+                console.log(localStorage.getItem('token'));
                 this.$router.push('/home');
             }
             else{
@@ -76,7 +76,7 @@ export default {
         },
     },
     mounted(){
-        if(sessionStorage.getItem('token') != null){
+        if(localStorage.getItem('token') != null){
             this.$router.push('/home');
         }
     }

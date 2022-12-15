@@ -40,9 +40,10 @@ export default {
     props:[
       'loggedIn', 'loggedUser'
     ],
+    // emits:['destroyUser', 'updateLogin'],
     methods:{
       logout(){
-        sessionStorage.clear();
+        localStorage.clear();
         this.$emit('destroyUser');
         this.$router.push('/login');
       },
