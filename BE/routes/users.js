@@ -161,7 +161,12 @@ router.post('/pemesanans/checkout', async function (req, res, next) {
         const ref = db.collection('kamars').doc(pemesanan.data().kamar_id);
         var dt = await ref.get();
         console.log("ok");
-        if(dt.data().available == pemesanan.data().end_date){
+        //console.log(dt);
+        console.log(dt.data().available);
+        console.log(pemesanan.data().end_date);
+        console.log(dt.data().available == pemesanan.data().end_date);
+        if(JSON.stringify(dt.data().available) == JSON.stringify(pemesanan.data().end_date)){
+            console.log("masuk sini");
             const response2 = await db.collection('kamars')
                                     .doc(pemesanan.data().kamar_id)
                                     .update({available: null});
