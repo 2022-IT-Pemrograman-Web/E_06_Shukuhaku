@@ -89,7 +89,10 @@ router.get('/pemesanans', async function (req, res, next) {
         var pemesanans = [];
         await db.collection("pemesanans").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                pemesanans.push({id: doc.id, ...doc.data()});
+                let data = doc.data();
+                data['start_date'] = data['start_date'].toDate();
+                data['end_date'] = data['end_date'].toDate();
+                pemesanans.push({id: doc.id, ...data});
             });
         });
         console.log(pemesanans);
@@ -104,7 +107,10 @@ router.get('/pemesanans/user/:id', async function (req, res, next) {
         let pemesanans = [];
         await db.collection("pemesanans").where("user_id", "==", req.params.id).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                pemesanans.push({id: doc.id, ...doc.data()});
+                let data = doc.data();
+                data['start_date'] = data['start_date'].toDate();
+                data['end_date'] = data['end_date'].toDate();
+                pemesanans.push({id: doc.id, ...data});
             });
         });
         console.log(pemesanans);
@@ -121,6 +127,8 @@ router.get('/pemesanans/active', async function (req, res, next) {
         await db.collection("pemesanans").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 let data = doc.data();
+                data['start_date'] = data['start_date'].toDate();
+                data['end_date'] = data['end_date'].toDate();
                 console.log(data.checked_out);
                 if(data.checked_out == null) pemesanans.push({id: doc.id, ...data});
             });
