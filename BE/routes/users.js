@@ -2,6 +2,7 @@ const router = require('express').Router();
 const db = require('../firebase/firestore');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const fromDate = require('firebase-admin').firestore.Timestamp.fromDate;
 
 router.get('/kamars', async function (req, res, next) {
     try{
@@ -62,14 +63,14 @@ router.post('/pemesanans', async function (req, res, next) {
         end_date.setDate(end_date.getDate() + req.body.total_day); 
         const data = {
             kamar_id: req.body.kamar_id,
-            user_id: req.body.kamar_id,
+            user_id: req.body.user_id,
             total_day: req.body.total_day,
             total_price: req.body.total_price,
             start_date: new Date(),
             end_date: end_date,
             checked_out: null,
         };
-        const response = await db.collection('pemesanans').set(data);
+        const response = await db.collection('pemesanans').add(data);
         console.log(response);
         const response2 = await db.collection('kamars')
                                     .doc(req.body.kamar_id)
@@ -110,6 +111,21 @@ router.post('/pemesanans/checkout', async function (req, res, next) {
         console.log(response2);
         
         res.json({message: "success", data: {checked_out: checked_out}});
+    } catch (err){
+        res.status(500).json({message: "Something wrong...", data: null })
+    }
+});
+
+router.get('/voucher', async function (req, res, next) {
+    try{
+        let voucher = [];
+        await db.collection("voucher").where("expiredAt", ">", fromDate(new Date())).get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                voucher.push({id: doc.id, ...doc.data()});
+            });
+        });
+        console.log(voucher);
+        res.json({message: "success", data: {voucher: voucher}});
     } catch (err){
         res.status(500).json({message: "Something wrong...", data: null })
     }

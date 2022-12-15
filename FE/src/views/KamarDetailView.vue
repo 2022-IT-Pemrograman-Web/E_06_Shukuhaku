@@ -1,41 +1,66 @@
 <template lang="">
-    <div class="container">
-        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
-            <div class="feature col" v-if="private_onsen == 'Yes'">
-              <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
-                <svg class="bi" width="1em" height="1em"><use xlink:href="#collection"></use></svg>
+    <div class="container px-4 py-5" id="custom-cards">
+        <h2 class="pb-2 border-bottom fw-bold">Facilities</h2>
+    
+        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+          <div class="col" v-if="private_onsen == 'Yes'">
+            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg onsen">
+              <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold white-text">Private Onsen</h3>
               </div>
-              <h3 class="fs-2">Featured titles</h3>
-              <p></p>
-              <a href="#" class="icon-link d-inline-flex align-items-center">
-                Call to action
-                <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"></use></svg>
-              </a>
-            </div>
-            <div class="feature col">
-              <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
-                <svg class="bi" width="1em" height="1em"><use xlink:href="#people-circle"></use></svg>
-              </div>
-              <h3 class="fs-2">Featured title</h3>
-              <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-              <a href="#" class="icon-link d-inline-flex align-items-center">
-                Call to action
-                <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"></use></svg>
-              </a>
-            </div>
-            <div class="feature col">
-              <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
-                <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"></use></svg>
-              </div>
-              <h3 class="fs-2">Featured title</h3>
-              <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-              <a href="#" class="icon-link d-inline-flex align-items-center">
-                Call to action
-                <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"></use></svg>
-              </a>
             </div>
           </div>
-    </div>
+    
+          <div class="col" v-if="balcony == 'Yes'">
+            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg balcony">
+              <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                <h3 class="pt-5 mt-3 mb-4 display-6 lh-1 fw-bold white-text">Mountain View Balcony</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="col" v-if="tv == 'Yes'">
+            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg tv">
+              <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold white-text">TV</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="col" v-if="ac == 'Yes'">
+            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg ac">
+              <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold white-text">AC</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="col" v-if="living_room == 'Yes'">
+            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg living-room">
+              <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold white-text">Living Room</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg breakfast">
+              <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold white-text">Breakfast : {{ breakfast }}</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg breakfast" :class=" bed.type=='King' ? 'king-size-bed' : 'queen-size-bed' ">
+              <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold white-text">Bed : {{ bed.quantity }} {{ bed.type }} Size</h3>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
 </template>
 <script>
 export default {
@@ -48,6 +73,7 @@ export default {
             ac : '',
             living_room : '',
             balcony : '',
+            private_onsen : '',
             datas: [],
             config: {
                 headers: {
@@ -70,7 +96,7 @@ export default {
             }
         },
     },
-    async mounted() {
+    async beforeMount() {
         await this.getKamar();
         console.log('hi', this.$route.params.type)
         while(this.datas.kamars.length != 1){
@@ -87,10 +113,56 @@ export default {
         this.ac = this.datas.kamars[0].facility.ac;
         this.living_room = this.datas.kamars[0].facility.living_room;
         this.balcony = this.datas.kamars[0].facility.balcony;
-        console.log(this.datas.kamars[0].facility);
+        this.private_onsen = this.datas.kamars[0].facility.private_onsen;
     },
 }
 </script>
-<style lang="">
-    
+<style lang="css">
+    .onsen {
+        background-image : url("../assets/onsen.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .balcony {
+        background-image: url("../assets/balcony.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .tv {
+        background-image: url("../assets/tv.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .white-text {
+        color: white;
+        text-shadow: 5px 5px 10px #000000;
+    }
+
+    .ac {
+        background-image: url("../assets/ac.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .living-room {
+        background-image: url("../assets/tv.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .breakfast {
+        background-image: url("../assets/breakfast.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .king-size-bed {
+        background-image: url("../assets/king-size-bed.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .queen-size-bed {
+        background-image: url("../assets/queen-size-bed.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 </style>
