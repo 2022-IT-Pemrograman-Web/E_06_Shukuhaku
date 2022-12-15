@@ -82,6 +82,7 @@ router.post('/pemesanans', async function (req, res, next) {
         console.log(kamar);
         if(kamar.length == 0){
             res.status(501).json({message: "Kamar is full"});
+            return;
         }
         const data = {
             kamar_id: kamar[0].id,
@@ -112,6 +113,23 @@ router.get('/pemesanans/user', async function (req, res, next) {
         await db.collection("pemesanans").where("user_id", "==", user.id).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 pemesanans.push({id: doc.id, ...doc.data()});
+            });
+        });
+        console.log(pemesanans);
+        res.json({message: "success", data: {pemesanans: pemesanans}});
+    } catch (err){
+        res.status(500).json({message: "Something wrong...", data: null })
+    }
+});
+
+router.get('/pemesanans/user/active', async function (req, res, next) {
+    try{
+        let user = req.user;
+        let pemesanans = [];
+        await db.collection("pemesanans").where("user_id", "==", user.id).get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                let data = doc.data();
+                if(data.checked_out == null) pemesanans.push({id: doc.id, ...data});
             });
         });
         console.log(pemesanans);
