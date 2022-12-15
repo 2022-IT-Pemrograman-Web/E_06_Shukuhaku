@@ -157,9 +157,10 @@ router.post('/pemesanans/checkout', async function (req, res, next) {
         const pemesananRef = await db.collection('pemesanans').doc(id);
         const response = await pemesananRef.update({checked_out: checked_out});
         console.log(response);
-        let pemesanan = pemesananRef.get();
+        let pemesanan = await pemesananRef.get();
         const ref = db.collection('kamars').doc(pemesanan.data().kamar_id);
         var dt = await ref.get();
+        console.log("ok");
         if(dt.data().available == pemesanan.data().end_date){
             const response2 = await db.collection('kamars')
                                     .doc(pemesanan.data().kamar_id)
