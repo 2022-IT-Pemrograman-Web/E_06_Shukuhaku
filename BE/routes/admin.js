@@ -102,13 +102,26 @@ router.get('/pemesanans', async function (req, res, next) {
 router.get('/pemesanans/user/:id', async function (req, res, next) {
     try{
         let pemesanans = [];
-        await db.collection("pemesanans").where("user_id", "==", req.param('id')).get().then((querySnapshot) => {
+        await db.collection("pemesanans").where("user_id", "==", req.params.id).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 pemesanans.push({id: doc.id, ...doc.data()});
             });
         });
         console.log(pemesanans);
         res.json({message: "success", data: {pemesanans: pemesanans}});
+    } catch (err){
+        res.status(500).json({message: "Something wrong...", data: null })
+    }
+});
+
+router.post('/pemesanans/checkin', async function (req, res, next) {
+    try{
+        let id = req.body.id;
+        let checked_in = new Date();
+        const pemesananRef = await db.collection('pemesanans').doc(id);
+        const response = await pemesananRef.update({checked_in: checked_in});
+        console.log(response);
+        res.json({message: "success", data: {checked_in: checked_in}});
     } catch (err){
         res.status(500).json({message: "Something wrong...", data: null })
     }

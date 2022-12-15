@@ -110,11 +110,15 @@ router.get('/pemesanans/user', async function (req, res, next) {
     try{
         let user = req.user;
         let pemesanans = [];
-        await db.collection("pemesanans").where("user_id", "==", user.id).get().then((querySnapshot) => {
+        console.log(user);
+        await db.collection("pemesanans")
+            .where("user_id", "==", user.email)
+            .get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 pemesanans.push({id: doc.id, ...doc.data()});
             });
         });
+        console.log("ok");
         console.log(pemesanans);
         res.json({message: "success", data: {pemesanans: pemesanans}});
     } catch (err){
@@ -122,13 +126,14 @@ router.get('/pemesanans/user', async function (req, res, next) {
     }
 });
 
-router.get('/pemesanans/user/active', async function (req, res, next) {
+router.get('/pemesanans/active/user', async function (req, res, next) {
     try{
         let user = req.user;
         let pemesanans = [];
-        await db.collection("pemesanans").where("user_id", "==", user.id).get().then((querySnapshot) => {
+        await db.collection("pemesanans").where("user_id", "==", user.email).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 let data = doc.data();
+                console.log(data.checked_out);
                 if(data.checked_out == null) pemesanans.push({id: doc.id, ...data});
             });
         });
