@@ -114,6 +114,24 @@ router.get('/pemesanans/user/:id', async function (req, res, next) {
     }
 });
 
+router.get('/pemesanans/active', async function (req, res, next) {
+    try{
+        let user = req.user;
+        let pemesanans = [];
+        await db.collection("pemesanans").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                let data = doc.data();
+                console.log(data.checked_out);
+                if(data.checked_out == null) pemesanans.push({id: doc.id, ...data});
+            });
+        });
+        console.log(pemesanans);
+        res.json({message: "success", data: {pemesanans: pemesanans}});
+    } catch (err){
+        res.status(500).json({message: "Something wrong...", data: null })
+    }
+});
+
 router.post('/pemesanans/checkin', async function (req, res, next) {
     try{
         let id = req.body.id;
