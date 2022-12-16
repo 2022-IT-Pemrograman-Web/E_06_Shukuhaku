@@ -38,7 +38,7 @@ const router = createRouter({
       component: () => import('../views/KamarView.vue')
     },
     {
-      path: '/kamar/:id',
+      path: '/kamar/:type',
       name: 'kamar-detail',
       component: () => import('../views/KamarDetailView.vue')
     },

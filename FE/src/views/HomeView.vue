@@ -2,11 +2,46 @@
 export default{
   data(){
     return{
+      pemesanan: [],
+      config: {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Control-Allow-Origin': '*',
+          'x-access-token': localStorage.getItem('token'),
+        },
+        withCredentials: true,
+      },
     }
   },
   props:[
-    'loggedIn', 'loggedUser',
-  ]
+    'loggedIn', 'loggedUser'
+  ],
+  methods:{
+    async getActivePemesananUser(){
+      try{
+        const response = await this.axios.get('http://localhost:3000/user/pemesanans/active/user', this.config);
+        console.log(response);
+        this.pemesanan = response.data.data.pemesanans;
+        console.log(this.pemesanan)
+      } catch(err){
+        console.log(err);
+      }
+    },
+    async selfcheckout(id){
+      try {
+        const response = await this.axios.post('http://localhost:3000/user/pemesanans/checkout',{
+          id: id
+        },this.config);
+        console.log(response);
+        this.getActivePemesananUser();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
+  beforeMount(){
+    this.getActivePemesananUser();
+  },
 }
 </script>
 
@@ -37,11 +72,13 @@ export default{
       </div>
       <br>
 
-      <div class="p-5 mb-4 bg-light rounded-3 checkout" v-if="loggedIn">
-        <div class="container-fluid py-5" >
-          <h1 class="display-5 fw-bold white-text">Kamar Berapa gitu</h1>
-          <p class="col-md-8 fs-4 white-text">Tipe kelas kamar</p>
-          <button class="btn btn-danger btn-lg box-shadow" type="button">Self Check Out</button>
+      <div class="p-5 mb-4 bg-light rounded-3 checkout" v-show="loggedIn" v-for="p in pemesanan">
+        <div class="container-fluid py-5">
+          <h1 class="display-5 fw-bold white-text">Kamar {{ p.kamar_id }}</h1>
+          <p class="col-md-8 fs-5 white-text">Start Date : {{ p.start_date }}</p>
+          <p class="col-md-8 fs-5 white-text">End Date : {{ p.end_date }}</p>
+          <button class="btn btn-danger btn-lg box-shadow" type="button" v-if="p.checked_in == null && p.checked_out == null" disabled>Please Check In</button>
+          <button class="btn btn-danger btn-lg box-shadow" type="button" v-if="p.checked_in != null && p.checked_out == null" v-on:click="selfcheckout(p.id)">Self Check Out</button>
         </div>
       </div>
 
@@ -50,14 +87,14 @@ export default{
           <div class="h-100 p-5 text-bg-dark rounded-3">
             <h2 class="fw-bold">Pemesanan</h2>
             <p>Silahkan Melakukan Pemesanan</p>
-            <button class="btn btn-outline-light" type="button">Example button</button>
+            <button class="btn btn-outline-light" type="button" v-on:click="$router.push('/pemesanan')">Go To Pemesanan</button>
           </div>
         </div>
         <div class="col-md-6">
           <div class="h-100 p-5 bg-light border rounded-3">
             <h2>Jenis Kamar</h2>
             <p>Daftar jenis kamar yang tersedia pada Shukuhaku</p>
-            <button class="btn btn-outline-secondary" type="button">Example button</button>
+            <button class="btn btn-outline-secondary" type="button" v-on:click="$router.push('/kamar')">Check Jenis Kamar</button>
           </div>
         </div>
       </div>
