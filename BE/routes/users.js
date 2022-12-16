@@ -73,7 +73,7 @@ router.post('/pemesanans', async function (req, res, next) {
                         kamar.push({id: doc.id, ...doc.data()});
                     });
                 });
-        await db.collection('kamars').where('available', '<=', fromDate(new Date())).get()
+        await db.collection('kamars').where('available', '<=', fromDate(new Date(req.body.start_date))).get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         if(doc.data().class == req.body.kamar_class) kamar.push({id: doc.id, ...doc.data()});
