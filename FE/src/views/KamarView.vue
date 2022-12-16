@@ -15,7 +15,7 @@
         <div class="col p-4 d-flex flex-column position-static">
           <strong class="d-inline-block mb-2 text-primary"></strong>
           <h3 class="mb-0 fw-bold">{{ data.class }}</h3>
-          <p class="card-text mb-auto"></p>
+          <p class="card-text mb-auto">IDR {{ data.price }}</p>
           <a :href="'/kamar/' + data.class" class="stretched-link">Check Facilites</a>
         </div>
         <div class="col-auto d-none d-lg-block">

@@ -29,7 +29,7 @@
                 <td v-if="p.checked_in == null && p.checked_out == null">{{ p.start_date }}</td>
                 <td v-if="p.checked_in == null && p.checked_out == null">{{ p.end_date }}</td>
                 <td v-if="p.checked_in == null && p.checked_out == null">
-                  <button class="btn btn-danger btn-lg box-shadow" type="button" v-if="p.checked_in == null && p.checked_out == null" v-on:click="checkedIn(p.id)">Please Check In</button>
+                  <button class="btn btn-danger btn-lg box-shadow" type="button" v-if="p.checked_in == null && p.checked_out == null" v-on:click="checkedIn(p.id)">Check In</button>
                 </td>
               </tr>
             </tbody>
