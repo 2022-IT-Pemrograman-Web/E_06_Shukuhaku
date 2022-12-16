@@ -31,6 +31,32 @@ router.get('/users/:id', async function (req, res, next) {
     }
 });
 
+// router.post('/kamars', async function (req, res, next) {
+//     try{
+//         let id = req.body.id;
+//         const data = {
+//             class: req.body.class,
+//             price: req.body.price,
+//             available: null,
+//             facility: {
+//                 balcony: req.body.balcony,
+//                 ac: req.body.ac,
+//                 tv: req.body.tv,
+//                 living_room: req.body.living_room,
+//                 bed: req.body.bed,
+//                 breakfast: req.body.breakfast,
+//                 bathroom: req.body.bathroom,
+//                 private_onsen: req.body.private_onsen,
+//             }
+//         };
+//         const response = await db.collection('kamars').doc(id).set(data);
+//         console.log(response);
+//         res.json({message: "success", data: {id: id, ...data}});
+//     } catch (err){
+//         res.status(500).json({message: "Something wrong...", data: null })
+//     }
+// });
+
 router.post('/kamars', async function (req, res, next) {
     try{
         let id = req.body.id;
@@ -38,16 +64,7 @@ router.post('/kamars', async function (req, res, next) {
             class: req.body.class,
             price: req.body.price,
             available: null,
-            facility: {
-                balcony: req.body.balcony,
-                ac: req.body.ac,
-                tv: req.body.tv,
-                living_room: req.body.living_room,
-                bed: req.body.bed,
-                breakfast: req.body.breakfast,
-                bathroom: req.body.bathroom,
-                private_onsen: req.body.private_onsen,
-            }
+            facility: req.body.facility,
         };
         const response = await db.collection('kamars').doc(id).set(data);
         console.log(response);
