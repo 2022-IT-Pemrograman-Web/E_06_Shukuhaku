@@ -5,6 +5,7 @@
     <div class="col-md-6 px-0">
       <h1 class="display-4 fst-italic">Tipe Kamar</h1>
       <p class="lead my-3">Choose based on your liking</p>
+      <button class="w-100 btn btn-primary btn-lg" v-if="role == 'admin'" v-on:click="toCreateKamar()">Create Kamar</button>
       <!-- <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p> -->
     </div>
   </div>
@@ -15,7 +16,7 @@
         <div class="col p-4 d-flex flex-column position-static">
           <strong class="d-inline-block mb-2 text-primary"></strong>
           <h3 class="mb-0 fw-bold">{{ data.class }}</h3>
-          <p class="card-text mb-auto"></p>
+          <p class="card-text mb-auto">IDR {{ data.price }}</p>
           <a :href="'/kamar/' + data.class" class="stretched-link">Check Facilites</a>
         </div>
         <div class="col-auto d-none d-lg-block">
@@ -42,6 +43,7 @@ export default {
                 },
                 withCredentials: true,
             },
+            role : JSON.parse(localStorage.getItem('user')).role,
         }
     },
     methods: {
@@ -58,6 +60,9 @@ export default {
         },
         random() {
             return Math.floor(Math.random() * 1000) + 1;
+        },
+        toCreateKamar() {
+            this.$router.push('/kamar/create');
         },
     },
     mounted() {

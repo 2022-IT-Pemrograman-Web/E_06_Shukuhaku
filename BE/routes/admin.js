@@ -64,8 +64,9 @@ router.post('/kamars', async function (req, res, next) {
             class: req.body.class,
             price: req.body.price,
             available: null,
-            facility: req.body.facility,
+            facility: JSON.parse(req.body.facility),
         };
+        console.log(data);
         const response = await db.collection('kamars').doc(id).set(data);
         console.log(response);
         res.json({message: "success", data: {id: id, ...data}});
